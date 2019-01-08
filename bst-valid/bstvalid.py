@@ -69,18 +69,20 @@ class Node:
         self.right = right
         self.data = data
 
-    def is_valid(self, rootdata=None, direction=None):
+    def is_valid(self, rootdata=None, isleft=None, isright=None):
         """Is this tree a valid BST?"""
+        
         # check against root node 
-        if rootdata and direction:
-            if direction == "L" and self.data > rootdata:
+        if rootdata and isleft:
+            if self.data > rootdata:
                 return False
-            if direction == "R" and self.data < rootdata:
+        if rootdata and isright:
+            if self.data < rootdata:
                 return False
 
         l_valid = True
         r_valid = True
-        if not rootdata:
+        if rootdata is None:
             rootdata = self.data
 
         if self.left is None:
@@ -88,20 +90,21 @@ class Node:
         elif self.left.data > self.data:
             return False
         else:
-            if not direction:
-                direction = "L"
-            l_valid = self.left.is_valid(rootdata, direction)
+            if isleft is None:
+                isleft = True
+
+            l_valid = self.left.is_valid(rootdata, isleft = isleft)
 
         if self.right is None:
             r_valid = True
         elif self.right.data < self.data:
             return False
         else:
-            if not direction:
-                direction = "R"
-            r_valid = self.right.is_valid(rootdata, direction)
+            if isright is None:
+                isright = True
+            r_valid = self.right.is_valid(rootdata, isright=isright)
 
-        print("node {}, l_valid {}, r_valid {}, rootdata {}, direction {}".format(self.data, l_valid, r_valid, rootdata, direction))
+        print("node {}, l_valid {}, r_valid {}, rootdata {}, isleft {}, isright {}".format(self.data, l_valid, r_valid, rootdata, isleft, isright))
         return l_valid and r_valid
 
 
