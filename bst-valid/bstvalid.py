@@ -69,44 +69,46 @@ class Node:
         self.right = right
         self.data = data
 
-    def is_valid(self, rootdata=None, isleft=None, isright=None):
+    def is_valid(self, min_val=None, max_val=None):
         """Is this tree a valid BST?"""
         
-        # check against root node 
-        if rootdata and isleft:
-            if self.data > rootdata:
-                return False
-        if rootdata and isright:
-            if self.data < rootdata:
-                return False
+        # check self against min or max
+        if min_val and self.data < min_val:
+            return False
+        if max_val and self.data > max_val:
+            return False
 
-        l_valid = True
-        r_valid = True
-        if rootdata is None:
-            rootdata = self.data
-
+        # check the left side
         if self.left is None:
             l_valid = True
-        elif self.left.data > self.data:
-            return False
         else:
-            if isleft is None:
-                isleft = True
+            l_valid = self.left.is_valid(min_val=min_val, max_val=self.data)
 
-            l_valid = self.left.is_valid(rootdata, isleft = isleft)
-
+        # check the right side
         if self.right is None:
             r_valid = True
-        elif self.right.data < self.data:
-            return False
         else:
-            if isright is None:
-                isright = True
-            r_valid = self.right.is_valid(rootdata, isright=isright)
+            r_valid = self.right.is_valid(min_val=self.data, max_val=max_val)
 
-        print("node {}, l_valid {}, r_valid {}, rootdata {}, isleft {}, isright {}".format(self.data, l_valid, r_valid, rootdata, isleft, isright))
+        
         return l_valid and r_valid
 
+    def all_nodes(self):
+        """return all the nodes in order"""
+        if self.left is None and self.right is None:
+            return [self.data]
+
+        return self.left.all_nodes() + [self.data] + self.right.all_nodes()
+
+    def is_valid_alt(self):
+        allnodes = self.all_nodes()
+        current = allnodes[0]
+        for val in allnodes[1:]:
+            if val < current:
+                return False
+            current = val
+
+        return True
 
 if __name__ == "__main__":
     import doctest
@@ -114,3 +116,20 @@ if __name__ == "__main__":
     if doctest.testmod().failed == 0:
         print("\n*** ALL TESTS PASSED; THAT'S VALID!\n")
 
+    # False Tree
+    y = Node(4,
+           Node(2, Node(1), Node(3)),
+           Node(6, Node(1), Node(7))
+    )
+
+    # False Tree
+    x = Node(4,
+           Node(2, Node(3), Node(3)),
+           Node(6, Node(5), Node(7))
+    )
+
+    # True Tree
+    t = Node(4,
+           Node(2, Node(1), Node(3)),
+           Node(6, Node(5), Node(7))
+    )

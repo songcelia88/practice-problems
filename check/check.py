@@ -57,45 +57,47 @@ def check(king, queen):
     rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
     cols = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
-    if king[0] == queen[0]: # same column
+    if king[0] == queen[0] or king[1] == queen[1]: # same column or same row
         return True
 
-    if king[1] == queen[1]: # same row
-        return True
-
+    # check for the diagonal values
     queen_col = cols.index(queen[0])
     queen_row = rows.index(queen[1]) # might be unneccesary since index will always be row-1
     king_col = cols.index(king[0])
     king_row = rows.index(king[1])
 
-    n = 1 # how far away from queen
+    # more succinct way to check the diagonal
+    return abs(queen_col-king_col) == abs(queen_row-king_row)
 
-    # only check within the board
-    while queen_col-n >= 0 or queen_row-n >= 0 or queen_col+n < len(cols) or queen_row+n < len(rows):
+    # # brute forceish way to check
+    # n = 1 # how far away from queen
+
+    # # only check within the board
+    # while queen_col-n >= 0 or queen_row-n >= 0 or queen_col+n < len(cols) or queen_row+n < len(rows):
         
-        #-row, -col, bottom left corner
-        # print("checking bottom left, col {}, row {}".format(queen_col-n, queen_row-n))
-        if queen_col-n == king_col and queen_row-n == king_row:
-            return True
+    #     #-row, -col, bottom left corner
+    #     # print("checking bottom left, col {}, row {}".format(queen_col-n, queen_row-n))
+    #     if queen_col-n == king_col and queen_row-n == king_row:
+    #         return True
 
-        # +row, -col, top_left
-        # print("checking top left")
-        if queen_col-n == king_col and queen_row+n == king_row:
-            return True
+    #     # +row, -col, top_left
+    #     # print("checking top left")
+    #     if queen_col-n == king_col and queen_row+n == king_row:
+    #         return True
 
-        # -row, + col, bottom_right
-        # print("checking bottom right")
-        if queen_col+n == king_col and queen_row-n == king_row:
-            return True
+    #     # -row, + col, bottom_right
+    #     # print("checking bottom right")
+    #     if queen_col+n == king_col and queen_row-n == king_row:
+    #         return True
 
-        # +row, +col, top right
-        # print("checking top right")
-        if queen_col+n == king_col and queen_row+n == king_row:
-            return True
+    #     # +row, +col, top right
+    #     # print("checking top right")
+    #     if queen_col+n == king_col and queen_row+n == king_row:
+    #         return True
 
-        n+=1 # increment and move farther away from queen spot
+    #     n+=1 # increment and move farther away from queen spot
 
-    return False
+    # return False
 
 
 if __name__ == '__main__':
