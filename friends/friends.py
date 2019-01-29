@@ -164,7 +164,7 @@ class FriendGraph(object):
 
         for friend in current.adjacent:
             if friend not in seen:
-                if are_connected(friend.name, name2, seen):
+                if self.are_connected(friend.name, name2, seen):
                     return True
 
         return False
